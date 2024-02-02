@@ -1,11 +1,15 @@
-const canvas = document.getElementById("Tetris");
-const ctx = canvas.getContext("2d");
+// let canvas = document.getElementById("Tetris");
+// let ctx = canvas.getContext("2d");
+let canvas;
+let ctx;
 const fieldSize = [9, 19]; //x, y
 const startXY = [4, 0];
 
 document.addEventListener("DOMContentLoaded", Draw);
 
 function Draw() {
+  canvas = document.getElementById("Tetris");
+  ctx = canvas.getContext("2d");
   canvas.width = 400;
   canvas.height = 800;
 
@@ -18,7 +22,7 @@ function Draw() {
 }
 
 function SetupCanvas() {
-  canvas = document.getElementById("my-canvas");
+  canvas = document.getElementById("Tetris");
   ctx = canvas.getContext("2d");
   canvas.width = 936;
   canvas.height = 956;
@@ -33,13 +37,4 @@ function SetupCanvas() {
   // Draw gameboard rectangle
   ctx.strokeStyle = "black";
   ctx.strokeRect(8, 8, 280, 462);
-
-  tetrisLogo = new Image(161, 54);
-  tetrisLogo.onload = DrawTetrisLogo;
-  tetrisLogo.src = "tetrislogo.png";
-
-  // Set font for score label text and draw
-  ctx.fillStyle = "black";
-  ctx.font = "21px Arial";
-  ctx.fillText("SCORE", 300, 98);
 }
