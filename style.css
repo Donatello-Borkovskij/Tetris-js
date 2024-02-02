@@ -1,18 +1,14 @@
-#container {
-  position: relative;
-  width: 100%;
-  padding-bottom: 100%;
+body {
+  padding: 0;
+  text-align: center;
+  background: wheat;
+  color: blue;
 }
 
-#Tetris {
-  position: static;
-  width: 305px;
-  height: 605px;
-  background-color: black;
-  border: 5px solid blue;
+/* #Tetris {
   margin: auto;
-}
-
-.center {
-  margin: auto;
-}
+  background: blue;
+  display: block;
+  height: 800px;
+  width: 400px;
+} */
