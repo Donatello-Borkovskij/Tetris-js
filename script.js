@@ -1,15 +1,11 @@
-// let canvas = document.getElementById("Tetris");
-// let ctx = canvas.getContext("2d");
-let canvas;
-let ctx;
+const canvas = document.getElementById("Tetris");
+const ctx = canvas.getContext("2d");
 const fieldSize = [9, 19]; //x, y
 const startXY = [4, 0];
 
 document.addEventListener("DOMContentLoaded", Draw);
 
 function Draw() {
-  canvas = document.getElementById("Tetris");
-  ctx = canvas.getContext("2d");
   canvas.width = 400;
   canvas.height = 800;
 
