@@ -5,10 +5,6 @@ body {
   color: blue;
 }
 
-/* #Tetris {
-  margin: auto;
-  background: blue;
-  display: block;
-  height: 800px;
-  width: 400px;
-} */
+canvas {
+  border: 30px rgb(0, 255, 55);
+}
