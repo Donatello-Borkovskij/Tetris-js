@@ -3,8 +3,8 @@ const ctx = canvas.getContext("2d");
 const fieldHeight = 20;
 const fieldWidth = 10;
 
-const width = 400;
-const height = 800;
+const width = 300;
+const height = 600;
 const borderWidth = 2;
 
 let score = 0;
@@ -13,10 +13,65 @@ let score = 0;
 let coordinateArray = [...Array(fieldHeight)].map((e) =>
   Array(fieldWidth).fill(0)
 );
+//will hold 1 - has a square or 0 - does not have a square
+let fieldArray = [...Array(fieldHeight)].map((e) => Array(fieldWidth).fill(0));
 
-document.addEventListener("DOMContentLoaded", Draw);
+const tetrominos = [
+  [
+    [1, 0],
+    [0, 1],
+    [1, 1],
+    [2, 1],
+  ],
+  [
+    [0, 0],
+    [1, 0],
+    [2, 0],
+    [3, 0],
+  ],
+  [
+    [0, 0],
+    [0, 1],
+    [1, 1],
+    [2, 1],
+  ],
+  [
+    [0, 0],
+    [1, 0],
+    [0, 1],
+    [1, 1],
+  ],
+  [
+    [1, 0],
+    [2, 0],
+    [0, 1],
+    [1, 1],
+  ],
+  [
+    [0, 0],
+    [1, 0],
+    [1, 1],
+    [2, 1],
+  ],
+];
+const tetrominoColors = [
+  "green",
+  "red",
+  "blue",
+  "yellow",
+  "purple",
+  "orange",
+  "cyan",
+];
 
-function Draw() {
+let tetrominoX = 4;
+let tetrominoY = 0;
+let tetromino = [];
+let color;
+
+document.addEventListener("DOMContentLoaded", Setup);
+
+function Setup() {
   canvas.width = width;
   canvas.height = height;
 
@@ -43,13 +98,13 @@ function Draw() {
 
   MakeCoordinateArray();
 
+  document.addEventListener("keydown", KeyPress);
+
   console.log(coordinateArray);
 
-  ctx.fillStyle = "red";
-  DrawSquare(coordinateArray[1][1].x, coordinateArray[1][1].y);
-  DrawSquare(coordinateArray[2][1].x, coordinateArray[2][1].y);
-  DrawSquare(coordinateArray[3][1].x, coordinateArray[3][1].y);
-  DrawSquare(coordinateArray[3][2].x, coordinateArray[3][2].y);
+  // DrawSquare(coordinateArray[3][1].x, coordinateArray[3][1].y, "red");
+
+  CreateTetromino();
 }
 
 class Coordinates {
@@ -72,7 +127,57 @@ function MakeCoordinateArray() {
   }
 }
 
-function DrawSquare(x, y) {
+function DrawSquare(x, y, color) {
   const gridSize = width / fieldWidth - borderWidth;
+  ctx.fillStyle = color;
   ctx.fillRect(x, y, gridSize, gridSize);
+}
+
+function CreateTetromino() {
+  let randomTetromino = Math.floor(Math.random() * tetrominos.length);
+  tetromino = tetrominos[randomTetromino];
+  color = tetrominoColors[randomTetromino];
+  tetrominoX = 4;
+  tetrominoY = 0;
+  DrawTetromino();
+}
+
+function DrawTetromino() {
+  for (let i = 0; i < tetromino.length; i++) {
+    let x = tetromino[i][0] + tetrominoX;
+    let y = tetromino[i][1] + tetrominoY;
+
+    fieldArray[y][x] = 1;
+
+    DrawSquare(coordinateArray[y][x].x, coordinateArray[y][x].y, color);
+  }
+}
+
+function DeleteTetromino() {
+  for (let i = 0; i < tetromino.length; i++) {
+    let x = tetromino[i][0] + tetrominoX;
+    let y = tetromino[i][1] + tetrominoY;
+
+    fieldArray[y][x] = 0;
+
+    DrawSquare(coordinateArray[y][x].x, coordinateArray[y][x].y, "black");
+  }
+}
+
+function KeyPress(key) {
+  //A - left
+  if (key.keyCode == 65) {
+    DeleteTetromino();
+    tetrominoX--;
+  }
+  //D - right
+  else if (key.keyCode == 68) {
+    tetrominoX++;
+  }
+  //S - down
+  else if (key.keyCode == 83) {
+  }
+  //W - up
+  else if (key.keyCode == 87) {
+  }
 }
