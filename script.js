@@ -15,7 +15,7 @@ let coordinateArray = [...Array(fieldHeight)].map((e) =>
 );
 //will hold 1 - has a square or 0 - does not have a square
 let fieldArray = [...Array(fieldHeight)].map((e) => Array(fieldWidth).fill(0));
-
+//in tetrominos 1 means there is a square, 0 means there isn't
 const tetrominos = [
   [
     [0, 1, 0],
@@ -92,8 +92,6 @@ function Setup() {
   document.addEventListener("keydown", KeyPress);
 
   console.log(coordinateArray);
-
-  // DrawSquare(coordinateArray[3][1].x, coordinateArray[3][1].y, "red");
 
   CreateTetromino();
 }
@@ -187,11 +185,29 @@ function KeyPress(key) {
   }
   //W - up
   else if (key.keyCode == 87) {
-    // DeleteTetromino();
-    // RotateTetromino();
-    // DrawTetromino();
+    DeleteTetromino();
+    RotateTetromino();
+    DrawTetromino();
   }
 }
 
-// function RotateTetromino() {
-// }
+function RotateTetromino() {
+  const transposed = transpose(tetromino);
+  const rotatedTetromino = transposed.map((row) => row.reverse());
+  tetromino = rotatedTetromino;
+}
+
+function transpose(matrix) {
+  const rows = matrix.length;
+  const cols = matrix[0].length;
+  const transposedMatrix = [];
+
+  for (let j = 0; j < cols; j++) {
+    transposedMatrix[j] = [];
+    for (let i = 0; i < rows; i++) {
+      transposedMatrix[j][i] = matrix[i][j];
+    }
+  }
+
+  return transposedMatrix;
+}
