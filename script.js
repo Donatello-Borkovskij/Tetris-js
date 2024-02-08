@@ -18,40 +18,31 @@ let fieldArray = [...Array(fieldHeight)].map((e) => Array(fieldWidth).fill(0));
 
 const tetrominos = [
   [
+    [0, 1, 0],
+    [1, 1, 1],
+  ],
+  [[1, 1, 1, 1]],
+  [
     [1, 0],
-    [0, 1],
+    [1, 0],
     [1, 1],
-    [2, 1],
   ],
   [
-    [0, 0],
-    [1, 0],
-    [2, 0],
-    [3, 0],
-  ],
-  [
-    [0, 0],
-    [0, 1],
     [1, 1],
-    [2, 1],
+    [1, 1],
   ],
   [
-    [0, 0],
-    [1, 0],
+    [0, 1],
     [0, 1],
     [1, 1],
   ],
   [
-    [1, 0],
-    [2, 0],
-    [0, 1],
-    [1, 1],
+    [0, 1, 1],
+    [1, 1, 0],
   ],
   [
-    [0, 0],
-    [1, 0],
-    [1, 1],
-    [2, 1],
+    [1, 1, 0],
+    [0, 1, 1],
   ],
 ];
 const tetrominoColors = [
@@ -144,23 +135,34 @@ function CreateTetromino() {
 
 function DrawTetromino() {
   for (let i = 0; i < tetromino.length; i++) {
-    let x = tetromino[i][0] + tetrominoX;
-    let y = tetromino[i][1] + tetrominoY;
+    for (let j = 0; j < tetromino[i].length; j++) {
+      let x = j + tetrominoX;
+      let y = i + tetrominoY;
 
-    fieldArray[y][x] = 1;
+      // console.log(y);
+      // console.log(x);
 
-    DrawSquare(coordinateArray[y][x].x, coordinateArray[y][x].y, color);
+      if (tetromino[i][j] == 1) {
+        fieldArray[y][x] = 1;
+        DrawSquare(coordinateArray[y][x].x, coordinateArray[y][x].y, color);
+      }
+    }
   }
+  // console.log(tetromino);
 }
 
 function DeleteTetromino() {
   for (let i = 0; i < tetromino.length; i++) {
-    let x = tetromino[i][0] + tetrominoX;
-    let y = tetromino[i][1] + tetrominoY;
+    for (let j = 0; j < tetromino[i].length; j++) {
+      let x = j + tetrominoX;
+      let y = i + tetrominoY;
 
-    fieldArray[y][x] = 0;
+      // console.log(y);
+      // console.log(x);
 
-    DrawSquare(coordinateArray[y][x].x, coordinateArray[y][x].y, "black");
+      fieldArray[y][x] = 0;
+      DrawSquare(coordinateArray[y][x].x, coordinateArray[y][x].y, "black");
+    }
   }
 }
 
@@ -169,15 +171,27 @@ function KeyPress(key) {
   if (key.keyCode == 65) {
     DeleteTetromino();
     tetrominoX--;
+    DrawTetromino();
   }
   //D - right
   else if (key.keyCode == 68) {
+    DeleteTetromino();
     tetrominoX++;
+    DrawTetromino();
   }
   //S - down
   else if (key.keyCode == 83) {
+    DeleteTetromino();
+    tetrominoY++;
+    DrawTetromino();
   }
   //W - up
   else if (key.keyCode == 87) {
+    // DeleteTetromino();
+    // RotateTetromino();
+    // DrawTetromino();
   }
 }
+
+// function RotateTetromino() {
+// }
