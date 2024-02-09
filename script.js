@@ -167,15 +167,29 @@ function DeleteTetromino() {
 function KeyPress(key) {
   //A - left
   if (key.keyCode == 65) {
-    DeleteTetromino();
-    tetrominoX--;
-    DrawTetromino();
+    try {
+      DeleteTetromino();
+      tetrominoX--;
+      DrawTetromino();
+    } catch (error) {
+      console.log(error);
+      tetrominoX++;
+      DeleteTetromino();
+      DrawTetromino();
+    }
   }
   //D - right
   else if (key.keyCode == 68) {
-    DeleteTetromino();
-    tetrominoX++;
-    DrawTetromino();
+    try {
+      DeleteTetromino();
+      tetrominoX++;
+      DrawTetromino();
+    } catch (error) {
+      console.log(error);
+      tetrominoX--;
+      DeleteTetromino();
+      DrawTetromino();
+    }
   }
   //S - down
   else if (key.keyCode == 83) {
@@ -219,3 +233,7 @@ function moveDown() {
 }
 
 setInterval(moveDown, 2000);
+
+function WallCollision() {
+  console.log(tetromino[0].length);
+}
