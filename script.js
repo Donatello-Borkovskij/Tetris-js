@@ -158,8 +158,10 @@ function DeleteTetromino() {
       // console.log(y);
       // console.log(x);
 
-      fieldArray[y][x] = 0;
-      DrawSquare(coordinateArray[y][x].x, coordinateArray[y][x].y, "black");
+      if (tetromino[i][j] == 1) {
+        fieldArray[y][x] = 0;
+        DrawSquare(coordinateArray[y][x].x, coordinateArray[y][x].y, "black");
+      }
     }
   }
 }
@@ -173,8 +175,9 @@ function KeyPress(key) {
       DrawTetromino();
     } catch (error) {
       console.log(error);
-      tetrominoX++;
       DeleteTetromino();
+      tetrominoX++;
+
       DrawTetromino();
     }
   }
@@ -193,15 +196,17 @@ function KeyPress(key) {
   }
   //S - down
   else if (key.keyCode == 83) {
-    DeleteTetromino();
-    tetrominoY++;
-    DrawTetromino();
+    MoveDown();
   }
   //W - up
   else if (key.keyCode == 87) {
     DeleteTetromino();
     RotateTetromino();
     DrawTetromino();
+  }
+  //R-
+  else if (key.keyCode == 82) {
+    CreateTetromino();
   }
 }
 
@@ -235,14 +240,55 @@ function transpose(matrix) {
   return transposedMatrix;
 }
 
-function moveDown() {
-  DeleteTetromino();
-  tetrominoY++;
-  DrawTetromino();
+function MoveDown() {
+  if (tetrominoY + tetromino.length < fieldHeight) {
+    DeleteTetromino();
+    tetrominoY++;
+    DrawTetromino();
+    FloorCollision();
+  } else {
+    CreateTetromino();
+  }
 }
 
-setInterval(moveDown, 2000);
+setInterval(MoveDown, 2000);
 
 function WallCollision() {
-  console.log(tetromino[0].length);
+  for (let i = 0; i < tetromino.length; i++) {
+    for (let j = 0; j < tetromino[i].length; j++) {
+      let x = j + tetrominoX;
+      let y = i + tetrominoY;
+
+      // if(tetromino[i][j] == 1 &&fieldArray[y][x] == 1 &&
+      //   tetromino.length - 1 < i + 1)
+    }
+  }
+}
+
+function FloorCollision() {
+  for (let i = 0; i < tetromino.length; i++) {
+    for (let j = 0; j < tetromino[i].length; j++) {
+      let x = j + tetrominoX;
+      let y = i + tetrominoY;
+
+      // console.log(y);
+      // console.log(x);
+
+      if (y == fieldHeight - 1) {
+        CreateTetromino();
+      } else if (
+        tetromino[i][j] == 1 &&
+        fieldArray[y + 1][x] == 1 &&
+        tetromino.length - 1 < i + 1
+      ) {
+        CreateTetromino();
+      } else if (
+        tetromino[i][j] == 1 &&
+        fieldArray[y + 1][x] == 1 &&
+        tetromino[i + 1][j] == 0
+      ) {
+        CreateTetromino();
+      }
+    }
+  }
 }
