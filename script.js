@@ -169,28 +169,17 @@ function DeleteTetromino() {
 function KeyPress(key) {
   //A - left
   if (key.keyCode == 65) {
-    try {
+    if (tetrominoX > 0) {
       DeleteTetromino();
       tetrominoX--;
-      DrawTetromino();
-    } catch (error) {
-      console.log(error);
-      DeleteTetromino();
-      tetrominoX++;
-
       DrawTetromino();
     }
   }
   //D - right
   else if (key.keyCode == 68) {
-    try {
+    if (tetrominoX + tetromino[0].length < fieldWidth) {
       DeleteTetromino();
       tetrominoX++;
-      DrawTetromino();
-    } catch (error) {
-      console.log(error);
-      tetrominoX--;
-      DeleteTetromino();
       DrawTetromino();
     }
   }
