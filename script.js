@@ -206,9 +206,18 @@ function KeyPress(key) {
 }
 
 function RotateTetromino() {
+  let tetrominoCopy = tetromino;
+
   const transposed = transpose(tetromino);
   const rotatedTetromino = transposed.map((row) => row.reverse());
   tetromino = rotatedTetromino;
+
+  if (
+    tetrominoX + tetromino[0].length - 1 > fieldWidth - 1 ||
+    tetrominoY + tetromino.length - 1 > fieldHeight - 1
+  ) {
+    tetromino = tetrominoCopy;
+  }
 }
 
 function transpose(matrix) {
