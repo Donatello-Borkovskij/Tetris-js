@@ -13,7 +13,7 @@ let score = 0;
 let coordinateArray = [...Array(fieldHeight)].map((e) =>
   Array(fieldWidth).fill(0)
 );
-//will hold 1 - has a square or 0 - does not have a square
+//will hold values 1 - has a square or 0 - does not have a square
 let fieldArray = [...Array(fieldHeight)].map((e) => Array(fieldWidth).fill(0));
 //in tetrominos 1 means there is a square, 0 means there isn't
 const tetrominos = [
@@ -211,3 +211,11 @@ function transpose(matrix) {
 
   return transposedMatrix;
 }
+
+function moveDown() {
+  DeleteTetromino();
+  tetrominoY++;
+  DrawTetromino();
+}
+
+setInterval(moveDown, 2000);
