@@ -169,7 +169,7 @@ function DeleteTetromino() {
 function KeyPress(key) {
   //A - left
   if (key.keyCode == 65) {
-    if (tetrominoX > 0) {
+    if (!WallCollision(-1)) {
       DeleteTetromino();
       tetrominoX--;
       DrawTetromino();
@@ -177,7 +177,7 @@ function KeyPress(key) {
   }
   //D - right
   else if (key.keyCode == 68) {
-    if (tetrominoX + tetromino[0].length < fieldWidth) {
+    if (!WallCollision(1)) {
       DeleteTetromino();
       tetrominoX++;
       DrawTetromino();
@@ -231,10 +231,10 @@ function transpose(matrix) {
 
 function MoveDown() {
   if (tetrominoY + tetromino.length < fieldHeight) {
+    FloorCollision();
     DeleteTetromino();
     tetrominoY++;
     DrawTetromino();
-    FloorCollision();
   } else {
     CreateTetromino();
   }
@@ -242,39 +242,44 @@ function MoveDown() {
 
 setInterval(MoveDown, 2000);
 
-function WallCollision() {
+function WallCollision(direction) {
   for (let i = 0; i < tetromino.length; i++) {
     for (let j = 0; j < tetromino[i].length; j++) {
-      let x = j + tetrominoX;
+      let x = j + tetrominoX + direction;
       let y = i + tetrominoY;
 
-      // if(tetromino[i][j] == 1 &&fieldArray[y][x] == 1 &&
-      //   tetromino.length - 1 < i + 1)
+      // Check if the next position is out of bounds
+      if (x < 0 || x >= fieldWidth || y >= fieldHeight) {
+        return true; // Collision with wall
+      }
+
+      if (
+        fieldArray[y][x] == 1 &&
+        (tetromino[i][j + direction] == undefined ||
+          tetromino[i][j + direction] == 0) &&
+        tetromino[i][j] == 1
+      ) {
+        return true; // Collision with another blocks
+      }
     }
   }
+  return false;
 }
 
 function FloorCollision() {
   for (let i = 0; i < tetromino.length; i++) {
     for (let j = 0; j < tetromino[i].length; j++) {
       let x = j + tetrominoX;
-      let y = i + tetrominoY;
+      let y = i + tetrominoY + 1;
 
       // console.log(y);
       // console.log(x);
 
-      if (y == fieldHeight - 1) {
-        CreateTetromino();
-      } else if (
-        tetromino[i][j] == 1 &&
-        fieldArray[y + 1][x] == 1 &&
-        tetromino.length - 1 < i + 1
-      ) {
-        CreateTetromino();
-      } else if (
-        tetromino[i][j] == 1 &&
-        fieldArray[y + 1][x] == 1 &&
-        tetromino[i + 1][j] == 0
+      if (
+        y == fieldHeight ||
+        (tetromino[i][j] == 1 &&
+          fieldArray[y][x] == 1 &&
+          (tetromino.length - 1 < i + 1 || tetromino[i + 1][j] == 0))
       ) {
         CreateTetromino();
       }
