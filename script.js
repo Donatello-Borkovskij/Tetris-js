@@ -230,14 +230,10 @@ function transpose(matrix) {
 }
 
 function MoveDown() {
-  if (tetrominoY + tetromino.length < fieldHeight) {
-    FloorCollision();
-    DeleteTetromino();
-    tetrominoY++;
-    DrawTetromino();
-  } else {
-    CreateTetromino();
-  }
+  FloorCollision();
+  DeleteTetromino();
+  tetrominoY++;
+  DrawTetromino();
 }
 
 setInterval(MoveDown, 2000);
@@ -272,9 +268,6 @@ function FloorCollision() {
       let x = j + tetrominoX;
       let y = i + tetrominoY + 1;
 
-      // console.log(y);
-      // console.log(x);
-
       if (
         y == fieldHeight ||
         (tetromino[i][j] == 1 &&
@@ -286,3 +279,28 @@ function FloorCollision() {
     }
   }
 }
+
+function CompleteRowCheck() {
+  for (let i = fieldHeight - 1; i >= 0; i--) {
+    let row = 0;
+    console.log("i is: " + i);
+    for (let j = 0; j < fieldArray[1].length; j++) {
+      row += fieldArray[i][j];
+    }
+    console.log("row is: " + row);
+    if (row == fieldWidth) {
+      DeleteRow(i);
+    }
+  }
+}
+
+function DeleteRow(row) {
+  for (let i = 0; i < fieldWidth; i++) {
+    fieldArray[row][i] = 0;
+
+    DrawSquare(coordinateArray[row][i].x, coordinateArray[row][i].y, "black");
+    console.log("works" + row);
+  }
+}
+
+setInterval(CompleteRowCheck, 100);
