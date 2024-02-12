@@ -46,6 +46,7 @@ const tetrominos = [
     [0, 1, 1],
   ],
 ];
+
 const tetrominoColors = [
   "green",
   "red",
@@ -281,6 +282,7 @@ function FloorCollision() {
 }
 
 function CompleteRowCheck() {
+  let rowsToMove = [];
   for (let i = fieldHeight - 1; i >= 0; i--) {
     let row = 0;
     for (let j = 0; j < fieldArray[1].length; j++) {
@@ -288,27 +290,28 @@ function CompleteRowCheck() {
     }
     if (row == fieldWidth) {
       DeleteRow(i);
-      setTimeout(function () {
-        console.log("Paused for 2 seconds");
-      }, 2000);
-      MoveAllRowsDown(i);
-      //continue here
+      rowsToMove.push(i);
     }
+  }
+  rowsToMove.reverse();
+  for (let i = 0; i < rowsToMove.length; i++) {
+    MoveAllRowsDown(rowsToMove[i]);
   }
 }
 
 function DeleteRow(row) {
   for (let i = 0; i < fieldWidth; i++) {
     fieldArray[row][i] = 0;
+    colorArray[row][i] = "black";
     DrawSquare(coordinateArray[row][i].x, coordinateArray[row][i].y, "black");
   }
 }
 
 function MoveAllRowsDown(row) {
-  let fieldArrayCopy = fieldArray;
-  let colorArrayCopy = colorArray;
+  let fieldArrayCopy = JSON.parse(JSON.stringify(fieldArray));
+  let colorArrayCopy = JSON.parse(JSON.stringify(colorArray));
 
-  for (let i = row; i >= 0; i--) {
+  for (let i = row; i > 0; i--) {
     for (let j = 0; j < fieldWidth; j++) {
       fieldArray[i][j] = fieldArrayCopy[i - 1][j];
       colorArray[i][j] = colorArrayCopy[i - 1][j];
