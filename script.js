@@ -15,6 +15,7 @@ let coordinateArray = [...Array(fieldHeight)].map((e) =>
 );
 //will hold values 1 - has a square or 0 - does not have a square
 let fieldArray = [...Array(fieldHeight)].map((e) => Array(fieldWidth).fill(0));
+let colorArray = [...Array(fieldHeight)].map((e) => Array(fieldWidth).fill(0));
 //in tetrominos 1 means there is a square, 0 means there isn't
 const tetrominos = [
   [
@@ -142,6 +143,7 @@ function DrawTetromino() {
 
       if (tetromino[i][j] == 1) {
         fieldArray[y][x] = 1;
+        colorArray[y][x] = color;
         DrawSquare(coordinateArray[y][x].x, coordinateArray[y][x].y, color);
       }
     }
@@ -160,6 +162,7 @@ function DeleteTetromino() {
 
       if (tetromino[i][j] == 1) {
         fieldArray[y][x] = 0;
+        colorArray[y][x] = "black";
         DrawSquare(coordinateArray[y][x].x, coordinateArray[y][x].y, "black");
       }
     }
@@ -192,10 +195,6 @@ function KeyPress(key) {
     DeleteTetromino();
     RotateTetromino();
     DrawTetromino();
-  }
-  //R-
-  else if (key.keyCode == 82) {
-    CreateTetromino();
   }
 }
 
@@ -274,6 +273,7 @@ function FloorCollision() {
           fieldArray[y][x] == 1 &&
           (tetromino.length - 1 < i + 1 || tetromino[i + 1][j] == 0))
       ) {
+        CompleteRowCheck();
         CreateTetromino();
       }
     }
@@ -283,13 +283,16 @@ function FloorCollision() {
 function CompleteRowCheck() {
   for (let i = fieldHeight - 1; i >= 0; i--) {
     let row = 0;
-    console.log("i is: " + i);
     for (let j = 0; j < fieldArray[1].length; j++) {
       row += fieldArray[i][j];
     }
-    console.log("row is: " + row);
     if (row == fieldWidth) {
       DeleteRow(i);
+      setTimeout(function () {
+        console.log("Paused for 2 seconds");
+      }, 2000);
+      MoveAllRowsDown(i);
+      //continue here
     }
   }
 }
@@ -297,10 +300,23 @@ function CompleteRowCheck() {
 function DeleteRow(row) {
   for (let i = 0; i < fieldWidth; i++) {
     fieldArray[row][i] = 0;
-
     DrawSquare(coordinateArray[row][i].x, coordinateArray[row][i].y, "black");
-    console.log("works" + row);
   }
 }
 
-setInterval(CompleteRowCheck, 100);
+function MoveAllRowsDown(row) {
+  let fieldArrayCopy = fieldArray;
+  let colorArrayCopy = colorArray;
+
+  for (let i = row; i >= 0; i--) {
+    for (let j = 0; j < fieldWidth; j++) {
+      fieldArray[i][j] = fieldArrayCopy[i - 1][j];
+      colorArray[i][j] = colorArrayCopy[i - 1][j];
+      DrawSquare(
+        coordinateArray[i][j].x,
+        coordinateArray[i][j].y,
+        colorArray[i][j]
+      );
+    }
+  }
+}
