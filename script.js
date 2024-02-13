@@ -245,7 +245,7 @@ function MoveDown() {
   }
 }
 
-// setInterval(MoveDown, 2000);
+setInterval(MoveDown, 2000);
 
 function WallCollision(direction) {
   for (let i = 0; i < tetromino.length; i++) {
