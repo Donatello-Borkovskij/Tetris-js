@@ -235,14 +235,17 @@ function transpose(matrix) {
 
 function MoveDown() {
   if (!gameOver) {
-    FloorCollision();
-    DeleteTetromino();
-    tetrominoY++;
-    DrawTetromino();
+    if (FloorCollision()) {
+      CreateTetromino();
+    } else {
+      DeleteTetromino();
+      tetrominoY++;
+      DrawTetromino();
+    }
   }
 }
 
-setInterval(MoveDown, 2000);
+// setInterval(MoveDown, 2000);
 
 function WallCollision(direction) {
   for (let i = 0; i < tetromino.length; i++) {
@@ -281,10 +284,11 @@ function FloorCollision() {
           (tetromino.length - 1 < i + 1 || tetromino[i + 1][j] == 0))
       ) {
         CompleteRowCheck();
-        CreateTetromino();
+        return true;
       }
     }
   }
+  return false;
 }
 
 function CompleteRowCheck() {
@@ -343,5 +347,4 @@ function CheckGameOver() {
   }
 }
 //make  so rotations dont delete other blocks
-//check game over
 //make game over screen/ play again button
