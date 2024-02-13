@@ -8,6 +8,7 @@ const height = 600;
 const borderWidth = 2;
 
 let score = 0;
+let gameOver = false;
 //will hold values of coordinates where squares should be drawn.
 //choose a grid using array (example [x][y] x - line y - column), it should hold the coordinates that should be used for printing squares
 let coordinateArray = [...Array(fieldHeight)].map((e) =>
@@ -130,7 +131,10 @@ function CreateTetromino() {
   color = tetrominoColors[randomTetromino];
   tetrominoX = 4;
   tetrominoY = 0;
-  DrawTetromino();
+  CheckGameOver();
+  if (!gameOver) {
+    DrawTetromino();
+  }
 }
 
 function DrawTetromino() {
@@ -173,7 +177,7 @@ function DeleteTetromino() {
 function KeyPress(key) {
   //A - left
   if (key.keyCode == 65) {
-    if (!WallCollision(-1)) {
+    if (!WallCollision(-1) && !gameOver) {
       DeleteTetromino();
       tetrominoX--;
       DrawTetromino();
@@ -181,7 +185,7 @@ function KeyPress(key) {
   }
   //D - right
   else if (key.keyCode == 68) {
-    if (!WallCollision(1)) {
+    if (!WallCollision(1) && !gameOver) {
       DeleteTetromino();
       tetrominoX++;
       DrawTetromino();
@@ -192,7 +196,7 @@ function KeyPress(key) {
     MoveDown();
   }
   //W - up
-  else if (key.keyCode == 87) {
+  else if (key.keyCode == 87 && !gameOver) {
     DeleteTetromino();
     RotateTetromino();
     DrawTetromino();
@@ -230,10 +234,12 @@ function transpose(matrix) {
 }
 
 function MoveDown() {
-  FloorCollision();
-  DeleteTetromino();
-  tetrominoY++;
-  DrawTetromino();
+  if (!gameOver) {
+    FloorCollision();
+    DeleteTetromino();
+    tetrominoY++;
+    DrawTetromino();
+  }
 }
 
 setInterval(MoveDown, 2000);
@@ -323,3 +329,19 @@ function MoveAllRowsDown(row) {
     }
   }
 }
+
+function CheckGameOver() {
+  for (let i = 0; i < tetromino.length; i++) {
+    for (let j = 0; j < tetromino[i].length; j++) {
+      let x = j + 4;
+      let y = i;
+
+      if (tetromino[i][j] == 1 && fieldArray[y][x] == 1) {
+        gameOver = true;
+      }
+    }
+  }
+}
+//make  so rotations dont delete other blocks
+//check game over
+//make game over screen/ play again button
