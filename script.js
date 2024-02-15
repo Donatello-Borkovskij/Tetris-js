@@ -204,18 +204,36 @@ function KeyPress(key) {
 }
 
 function RotateTetromino() {
-  let tetrominoCopy = tetromino;
+  const tetrominoCopy = tetromino;
 
   const transposed = transpose(tetromino);
   const rotatedTetromino = transposed.map((row) => row.reverse());
-  tetromino = rotatedTetromino;
 
-  if (
-    tetrominoX + tetromino[0].length - 1 > fieldWidth - 1 ||
-    tetrominoY + tetromino.length - 1 > fieldHeight - 1
-  ) {
-    tetromino = tetrominoCopy;
+  const tetrominoWidth = rotatedTetromino[0].length;
+  const tetrominoHeight = rotatedTetromino.length;
+  const tetrominoRight = tetrominoX + tetrominoWidth - 1;
+  const tetrominoBottom = tetrominoY + tetrominoHeight - 1;
+
+  if (tetrominoRight > fieldWidth - 1 || tetrominoBottom > fieldHeight - 1) {
+    tetromino = tetrominoCopy; // Revert to original state if rotation causes collision with the field boundaries
+    return;
   }
+
+  // Check for collision with other blocks
+  for (let i = 0; i < tetrominoHeight; i++) {
+    for (let j = 0; j < tetrominoWidth; j++) {
+      const x = tetrominoX + j;
+      const y = tetrominoY + i;
+
+      if (rotatedTetromino[i][j] === 1 && fieldArray[y][x] === 1) {
+        tetromino = tetrominoCopy; // Revert to original state if rotation causes collision with other blocks
+        return;
+      }
+    }
+  }
+
+  // If no collisions, apply the rotation
+  tetromino = rotatedTetromino;
 }
 
 function transpose(matrix) {
