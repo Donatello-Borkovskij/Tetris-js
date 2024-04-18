@@ -1,4 +1,6 @@
 const canvas = document.getElementById("Tetris");
+const playAgain = document.getElementById("PlayAgain");
+const scoreText = document.getElementById("Score");
 const ctx = canvas.getContext("2d");
 const fieldHeight = 20;
 const fieldWidth = 10;
@@ -6,6 +8,7 @@ const fieldWidth = 10;
 const width = 300;
 const height = 600;
 const borderWidth = 2;
+const BGColor = "grey";
 
 let score = 0;
 let gameOver = false;
@@ -15,7 +18,7 @@ let coordinateArray = [...Array(fieldHeight)].map((e) =>
   Array(fieldWidth).fill(0)
 );
 //will hold values 1 - has a square or 0 - does not have a square
-let fieldArray = [...Array(fieldHeight)].map((e) => Array(fieldWidth).fill(0));
+let fieldArray = [];
 let colorArray = [...Array(fieldHeight)].map((e) => Array(fieldWidth).fill(0));
 //in tetrominos 1 means there is a square, 0 means there isn't
 const tetrominos = [
@@ -66,10 +69,13 @@ let color;
 document.addEventListener("DOMContentLoaded", Setup);
 
 function Setup() {
+  score = 0;
+  playAgain.style.display = "none";
+  gameOver = false;
   canvas.width = width;
   canvas.height = height;
 
-  ctx.fillStyle = "black";
+  ctx.fillStyle = BGColor;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   ctx.lineWidth = borderWidth;
@@ -89,6 +95,8 @@ function Setup() {
     ctx.lineTo(width, i);
     ctx.stroke();
   }
+
+  fieldArray = [...Array(fieldHeight)].map((e) => Array(fieldWidth).fill(0));
 
   MakeCoordinateArray();
 
@@ -167,8 +175,8 @@ function DeleteTetromino() {
 
       if (tetromino[i][j] == 1) {
         fieldArray[y][x] = 0;
-        colorArray[y][x] = "black";
-        DrawSquare(coordinateArray[y][x].x, coordinateArray[y][x].y, "black");
+        colorArray[y][x] = BGColor;
+        DrawSquare(coordinateArray[y][x].x, coordinateArray[y][x].y, BGColor);
       }
     }
   }
@@ -260,6 +268,8 @@ function MoveDown() {
       tetrominoY++;
       DrawTetromino();
     }
+  } else {
+    PlayAgain();
   }
 }
 
@@ -311,6 +321,7 @@ function FloorCollision() {
 
 function CompleteRowCheck() {
   let rowsToMove = [];
+  let rowsInARow = 0;
   for (let i = fieldHeight - 1; i >= 0; i--) {
     let row = 0;
     for (let j = 0; j < fieldArray[1].length; j++) {
@@ -319,19 +330,22 @@ function CompleteRowCheck() {
     if (row == fieldWidth) {
       DeleteRow(i);
       rowsToMove.push(i);
+      rowsInARow += 1;
     }
   }
   rowsToMove.reverse();
   for (let i = 0; i < rowsToMove.length; i++) {
     MoveAllRowsDown(rowsToMove[i]);
   }
+  score += 10 * rowsInARow;
+  scoreText.textContent = "Score: " + score;
 }
 
 function DeleteRow(row) {
   for (let i = 0; i < fieldWidth; i++) {
     fieldArray[row][i] = 0;
-    colorArray[row][i] = "black";
-    DrawSquare(coordinateArray[row][i].x, coordinateArray[row][i].y, "black");
+    colorArray[row][i] = BGColor;
+    DrawSquare(coordinateArray[row][i].x, coordinateArray[row][i].y, BGColor);
   }
 }
 
@@ -364,5 +378,7 @@ function CheckGameOver() {
     }
   }
 }
-//make  so rotations dont delete other blocks
-//make game over screen/ play again button
+
+function PlayAgain() {
+  playAgain.style.display = "block";
+}

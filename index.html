@@ -7,7 +7,15 @@
   </head>
   <body>
     <h1>Tetris</h1>
-    <!-- <button onclick="Draw()">Draw</button> -->
-    <canvas id="Tetris"></canvas>
+    <div class="container">
+      <canvas id="Tetris"></canvas>
+      <div id="SideBar">
+        <p id="Score">Score: 0</p>
+      </div>
+    </div>
+    <div id="PlayAgain">
+      GAME OVER
+      <button type="button" onclick="Setup()">PLAY AGAIN</button>
+    </div>
   </body>
 </html>
