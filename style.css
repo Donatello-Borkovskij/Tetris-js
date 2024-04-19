@@ -7,16 +7,19 @@ body {
 }
 
 canvas {
-  /* border: 30px solid rgb(11, 9, 146); */
-  margin: auto;
+  border: 5px solid blue;
+  /* margin: auto; */
   flex: 0 0 auto;
 }
 
 #SideBar {
-  flex: 0 0 auto; /* Prevent Sidebar from growing, maintain its original size */
+  flex: 0 0 auto;
   border: 2px solid blue;
   padding: 10px;
-  margin-left: 10px;
+  margin-left: 0px;
+  color: aqua;
+  width: 20vh;
+  text-align: left;
 }
 
 #PlayAgain {
@@ -30,16 +33,19 @@ canvas {
   display: none;
   border: 5px solid rgb(255, 0, 0);
   border-radius: 10px;
-  width: 300px;
-  height: 200px;
+  width: 20vh;
+  height: 10vh;
+  font-size: 1.5vh;
 }
 
 button {
-  display: block;
-  margin: auto;
+  width: 10vh;
+  height: 2vh;
 }
 
 .container {
   position: relative;
   display: flex;
+  justify-content: center;
+  height: 90vh;
 }
